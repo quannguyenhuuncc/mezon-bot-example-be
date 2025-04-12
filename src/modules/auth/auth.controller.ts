@@ -101,10 +101,10 @@ export class AuthController {
       if (!req.user?.sub) {
         throw new BadRequestException('Invalid token payload');
       }
-  
+
       const userId = req.user.sub;
       const refreshToken = req.body.refreshToken;
-  
+
       return this.authService.refreshTokens(userId, refreshToken);
     } catch (error) {
       console.error('Error refreshing tokens:', error);
