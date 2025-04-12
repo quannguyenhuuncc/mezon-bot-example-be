@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  ConfigModule as NestConfigModule,
+  ConfigService,
+} from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
@@ -9,11 +12,15 @@ import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConfigModule } from './modules/config/config.module';
+import { MezonModule } from './modules/mezon/mezon.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { BotModule } from './modules/bot/bot.module';
 
 @Module({
   imports: [
     // Configuration
-    ConfigModule.forRoot({
+    NestConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, databaseConfig],
       validate,
@@ -50,7 +57,7 @@ import { AuthModule } from './modules/auth/auth.module';
 
     // Rate limiting
     ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [NestConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService): ThrottlerModuleOptions => {
         return {
@@ -68,6 +75,12 @@ import { AuthModule } from './modules/auth/auth.module';
     HealthModule,
     UsersModule,
     AuthModule,
+    ConfigModule,
+    MezonModule.forRootAsync({
+      imports: [ConfigModule],
+    }),
+    EventEmitterModule.forRoot(),
+    BotModule,
   ],
 })
 export class AppModule {}
