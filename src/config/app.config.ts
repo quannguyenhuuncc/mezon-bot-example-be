@@ -9,7 +9,4 @@ export default registerAs('app', () => ({
   jwtExpirationTime: parseInt(process.env.JWT_EXPIRATION_TIME || '3600', 10),
   throttleLimit: parseInt(process.env.THROTTLE_LIMIT || '100', 10),
   throttleTtl: parseInt(process.env.THROTTLE_TTL || '60', 10),
-  // Add new bot configuration
-  botApiKey: process.env.BOT_API_KEY || '',
-  botWebhookUrl: process.env.BOT_WEBHOOK_URL || '',
 }));

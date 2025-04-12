@@ -48,15 +48,6 @@ class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   JWT_EXPIRATION: number;
-  
-  // Add new environment variables for bot functionality
-  @IsString()
-  @IsOptional()
-  BOT_API_KEY: string;
-  
-  @IsString()
-  @IsOptional()
-  BOT_WEBHOOK_URL: string;
 }
 
 export function validate(config: Record<string, unknown>) {
