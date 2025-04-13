@@ -41,3 +41,7 @@ export function getRandomColor(): string {
 export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
+
+export function showIf<T>(condition: boolean, value: T): T | undefined {
+  return condition ? value : typeof value === 'string' ? ('' as T) : undefined;
+}
