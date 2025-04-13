@@ -19,4 +19,7 @@ export default registerAs('app', () => ({
   // Rate limiting
   throttleLimit: parseInt(process.env.THROTTLE_LIMIT || '100', 10),
   throttleTtl: parseInt(process.env.THROTTLE_TTL || '60', 10),
+
+  // mezon
+  mezonToken: process.env.MEZON_TOKEN || 'your-mezon-token',
 }));

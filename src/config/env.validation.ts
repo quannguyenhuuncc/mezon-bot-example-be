@@ -48,6 +48,9 @@ class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   JWT_EXPIRATION: number;
+
+  @IsString()
+  MEZON_TOKEN: string;
 }
 
 export function validate(config: Record<string, unknown>) {
