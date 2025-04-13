@@ -6,6 +6,7 @@ import { UserResponseDto } from '../users/dto/user-response.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { TokenService } from './token/token.service';
 import { User } from '../users/domain/entities/user.entity';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 
-  async login(user: any): Promise<AuthResponseDto> {
+  async login(user: LoginDto & { id: string }): Promise<AuthResponseDto> {
     const tokens = await this.tokenService.generateTokens(user.id, user.email);
     await this.tokenService.storeRefreshToken(user.id, tokens.refreshToken);
 

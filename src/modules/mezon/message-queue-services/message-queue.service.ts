@@ -1,67 +1,71 @@
-// import { Injectable } from '@nestjs/common';
-// import { MezonService } from '../mezon.service';
-// import { MessageQueueStore } from './message-queue-store.service';
-// import { generateChannelMessageContent } from 'src/common/utils/message';
+import { Injectable } from '@nestjs/common';
+import { MezonService } from '../mezon.service';
+import { MessageQueueStore } from './message-queue-store.service';
+import { generateChannelMessageContent } from 'src/common/utils/message';
+import { EMarkdownType } from 'mezon-sdk';
 
-// @Injectable()
-// export class MessageQueueService {
-//   constructor(
-//     private readonly mezonService: MezonService,
-//     private readonly messageQueueStore: MessageQueueStore,
-//   ) {
-//     this.startMessageProcessor();
-//   }
+@Injectable()
+export class MessageQueueService {
+  constructor(
+    private readonly mezonService: MezonService,
+    private readonly messageQueueStore: MessageQueueStore,
+  ) {
+    this.startMessageProcessor();
+  }
 
-//   private async processDirectMessage(message: ReplyMezonMessage) {
-//     const dmChannel = await this.mezonService
-//         .getClient()
-//         .createDMchannel(message.mezonUserId!).then((dmChannel) => {
-//           if (!dmChannel?.channel_id) return;
-//           this.mezonService.sendMessageToUser({
-//             attachments: [],
-//             channelDmId: dmChannel.channel_id,
-//             messOptions: {},
-//             refs: [],
-//             textContent: message.message,
-//           });
-//         }
-//       ).catch((error) => {
-//         console.error('Error sending direct message:', error);
-//       });
-//   }
+  private async processDirectMessage(message: MessageForUser) {
+    const dmChannel = await this.mezonService
+      .getClient()
+      .createDMchannel(message.mezonUserId!)
+      .then(dmChannel => {
+        if (!dmChannel?.channel_id) return;
+        this.mezonService.sendMessageToUser({
+          channelDmId: dmChannel.channel_id,
+          textContent: message.contentText,
+        });
+        return dmChannel;
+      })
+      .catch(error => {
+        console.error('Error sending direct message:', error);
+        return null;
+      });
 
-//   private async processChannelMessage(message: ReplyMezonMessage) {
-//     try {
-//       await this.mezonService.sendMessage({
-//         clan_id: message.clan!.id,
-//         channel_id: message.channel!.id,
-//         is_public: message.isPublic,
-//         mode: message.messageMode,
-//         msg: generateChannelMessageContent({
-//           message: message.message, blockMessage: message.blockMessage,
-//         }),
-//       });
-//     } catch (error) {
-//       console.error('Error sending channel message:', error);
-//     }
-//   }
+    // TODO: add support for direct messages
+  }
 
-//   private async processNextMessage() {
-//     if (!this.messageQueueStore.hasMessages()) return;
+  private async processChannelMessage(message: MessageForChannel) {
+    try {
+      await this.mezonService.sendMessage({
+        clan_id: message.clanId,
+        channel_id: message.channelId,
+        is_public: message.isPublic,
+        mode: message.channelMode,
+        msg: generateChannelMessageContent({
+          message: message.contentText,
+          blockMessage: message.type === EMarkdownType.TRIPLE,
+        }),
+        ref: message.refs,
+      });
+    } catch (error) {
+      console.error('Error sending channel message:', error);
+    }
+  }
 
-//     const message = this.messageQueueStore.getNextMessage();
-//     if (!message) return;
+  private async processNextMessage() {
+    if (!this.messageQueueStore.hasMessages()) return;
+    const message = this.messageQueueStore.getNextMessage();
+    if (!message) return;
 
-//     if (message.mezonUserId) {
-//       await this.processDirectMessage(message);
-//     } else {
-//       await this.processChannelMessage(message);
-//     }
-//   }
+    if ('mezonUserId' in message) {
+      await this.processDirectMessage(message as MessageForUser);
+    } else {
+      await this.processChannelMessage(message as MessageForChannel);
+    }
+  }
 
-//   private startMessageProcessor() {
-//     setInterval(async () => {
-//       await this.processNextMessage();
-//     }, 50);
-//   }
-// }
+  private startMessageProcessor() {
+    setInterval(async () => {
+      await this.processNextMessage();
+    }, 50);
+  }
+}

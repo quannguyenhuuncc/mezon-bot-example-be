@@ -1,7 +1,3 @@
-export declare enum EMessageMode {
-  CHANNEL_MESSAGE = 2,
-  DM_MESSAGE = 4,
-}
 export declare enum EButtonMessageStyle {
   PRIMARY = 1,
   SECONDARY = 2,
@@ -21,9 +17,4 @@ export declare enum EMessageSelectType {
   USER = 2,
   ROLE = 3,
   CHANNEL = 4,
-}
-
-export declare enum EMarkdownType {
-  TRIPLE = 't',
-  SINGLE = 's',
 }

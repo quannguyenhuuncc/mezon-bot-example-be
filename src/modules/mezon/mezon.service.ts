@@ -110,6 +110,18 @@ export class MezonService {
     );
   }
 
+  sendMessageToUser(messageToUser: {
+    channelDmId: string;
+    textContent: string;
+    messOptions?: Record<string, any>;
+  }) {
+    this.client.sendDMChannelMessage(
+      messageToUser.channelDmId,
+      messageToUser.textContent,
+      messageToUser.messOptions,
+    );
+  }
+
   sendMessage(params: {
     clan_id: string;
     channel_id: string;

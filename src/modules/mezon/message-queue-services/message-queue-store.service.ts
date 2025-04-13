@@ -1,18 +1,18 @@
 export class MessageQueueStore {
-  // private readonly queue: ReplyMezonMessage[] = [];
-  // getMessageQueue() {
-  //   return this.queue;
-  // }
-  // addMessage(message: ReplyMezonMessage) {
-  //   this.queue.push(message);
-  // }
-  // addMessages(messages: ReplyMezonMessage[]) {
-  //   this.queue.push(...messages);
-  // }
-  // getNextMessage(): ReplyMezonMessage | undefined {
-  //   return this.queue.shift();
-  // }
-  // hasMessages(): boolean {
-  //   return this.queue.length > 0;
-  // }
+  private readonly queue: Array<MessageForChannel | MessageForUser> = [];
+  getMessageQueue() {
+    return this.queue;
+  }
+  addMessage(message: MessageForChannel | MessageForUser) {
+    this.queue.push(message);
+  }
+  addMessages(messages: Array<MessageForChannel | MessageForUser>) {
+    this.queue.push(...messages);
+  }
+  getNextMessage(): MessageForChannel | MessageForUser | undefined {
+    return this.queue.shift();
+  }
+  hasMessages(): boolean {
+    return this.queue.length > 0;
+  }
 }
