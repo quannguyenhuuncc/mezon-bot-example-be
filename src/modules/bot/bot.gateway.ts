@@ -19,6 +19,9 @@ import {
 } from 'mezon-sdk';
 import { MezonService } from '../mezon/mezon.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Repository } from 'typeorm';
+import { Channel } from '../mezon/domain/entities/channel.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BotGateway {
@@ -28,6 +31,8 @@ export class BotGateway {
   constructor(
     clientService: MezonService,
     private eventEmitter: EventEmitter2,
+    @InjectRepository(Channel)
+    private readonly channelsRepository: Repository<Channel>,
   ) {
     this.client = clientService.getClient();
   }
@@ -126,6 +131,23 @@ export class BotGateway {
     ['attachments', 'mentions', 'references'].forEach(key => {
       if (!Array.isArray(msg[key])) msg[key] = [];
     });
+
+    this.channelsRepository
+      .findOne({
+        where: { channelId: msg.channel_id },
+      })
+      .then(channel => {
+        if (!channel) {
+          this.channelsRepository.save({
+            channelId: msg.channel_id,
+            clanId: msg.clan_id,
+            name: msg.channel_label,
+            type: msg.mode,
+            isPublic: msg.is_public,
+          });
+        }
+      });
+
     this.eventEmitter.emit(Events.ChannelMessage, msg);
   };
 }
