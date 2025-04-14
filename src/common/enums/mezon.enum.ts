@@ -18,3 +18,9 @@ export declare enum EMessageSelectType {
   ROLE = 3,
   CHANNEL = 4,
 }
+
+export enum EMessageMode {
+  CHANNEL_MESSAGE = 2,
+  DM_MESSAGE = 4,
+  THREAD_MESSAGE = 6,
+}

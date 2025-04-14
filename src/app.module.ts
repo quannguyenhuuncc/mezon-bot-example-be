@@ -16,6 +16,7 @@ import { ConfigModule } from './modules/config/config.module';
 import { MezonModule } from './modules/mezon/mezon.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BotModule } from './modules/bot/bot.module';
+import { BotModule as BotRestModule } from './modules/bot-rest/bot.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { BotModule } from './modules/bot/bot.module';
     }),
     EventEmitterModule.forRoot(),
     BotModule,
+    BotRestModule,
   ],
 })
 export class AppModule {}

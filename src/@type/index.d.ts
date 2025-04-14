@@ -1,4 +1,5 @@
 import { ChannelMessageContent, EMarkdownType } from 'mezon-sdk';
+import { EMessageMode } from 'src/common/enums/mezon.enum';
 
 declare global {
   type MezonClientConfig = {
