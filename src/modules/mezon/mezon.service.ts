@@ -3,6 +3,8 @@ import {
   ApiChannelDescription,
   ApiMessageAttachment,
   ApiMessageMention,
+  ApiMessageRef,
+  ChannelMessageContent,
   MezonClient,
 } from 'mezon-sdk';
 
@@ -127,10 +129,10 @@ export class MezonService {
     channel_id: string;
     mode: number;
     is_public: boolean;
-    msg: any;
-    mentions?: Array<any>;
-    attachments?: Array<any>;
-    ref?: Array<any>;
+    msg: ChannelMessageContent;
+    mentions?: Array<ApiMessageMention>;
+    attachments?: Array<ApiMessageAttachment>;
+    ref?: Array<ApiMessageRef>;
     anonymous_message?: boolean;
     mention_everyone?: boolean;
     avatar?: string;
