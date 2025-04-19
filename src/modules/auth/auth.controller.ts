@@ -24,9 +24,9 @@ import {
 } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
-import { UserResponseDto } from '../users/dto/user-response.dto';
 import { Public } from './decorators/public.decorator';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { UserAuthResponseDto } from '../users/dto/user-auth-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -56,11 +56,29 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'User profile',
-    type: UserResponseDto,
+    type: UserAuthResponseDto,
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  getProfile(@Request() req): UserResponseDto {
-    return new UserResponseDto(req.user);
+  getProfile(@Request() req): UserAuthResponseDto {
+    // Only include essential user information
+    const { id, email, firstName, lastName } = req.user;
+    return new UserAuthResponseDto({ id, email, firstName, lastName });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User profile',
+    type: UserAuthResponseDto,
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  getProfile1(@Request() req): UserAuthResponseDto {
+    // Only include essential user information
+    const { id, email, firstName, lastName } = req.user;
+    return new UserAuthResponseDto({ id, email, firstName, lastName });
   }
 
   @UseGuards(JwtAuthGuard)

@@ -57,3 +57,8 @@ export function refGenerate(msg: ChannelMessage): Array<ApiMessageRef> {
     },
   ];
 }
+
+// Message component generation
+
+// Buttons
+export function generateButtons() {}
