@@ -3,7 +3,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { Events, ChannelMessage } from 'mezon-sdk';
 import { BOT_CONFIG } from 'src/common/enums/bot.enum';
 import { ConfigService } from 'src/modules/config/config.service';
-import { Asterisk } from '../asterisk-commands/asterisk';
+import { Asterisk } from '../../asterisk-commands/asterisk';
 import { MessageQueueStore } from 'src/modules/mezon/message-queue-services/message-queue-store.service';
 
 @Injectable()

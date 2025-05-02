@@ -3,8 +3,9 @@ import { BaseEntity } from '../../../../common/base.entity';
 import { Exclude } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { EMessageMode } from '../../../../common/enums/mezon.enum';
+import { BOT_TABLES } from 'src/common/enums/bot.enum';
 
-@Entity('channels')
+@Entity(BOT_TABLES.CHANNELS)
 export class Channel extends BaseEntity {
   @PrimaryColumn({ type: 'text' })
   @IsNotEmpty()

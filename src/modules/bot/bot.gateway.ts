@@ -20,8 +20,9 @@ import {
 import { MezonService } from '../mezon/mezon.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
-import { Channel } from '../mezon/domain/entities/channel.entity';
+import { Channel } from '../mezon/domain/entities/mezon-channel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MezonUser } from '../mezon/domain/entities/mezon-user.entity';
 
 @Injectable()
 export class BotGateway {
@@ -33,6 +34,8 @@ export class BotGateway {
     private eventEmitter: EventEmitter2,
     @InjectRepository(Channel)
     private readonly channelsRepository: Repository<Channel>,
+    @InjectRepository(MezonUser)
+    private readonly usersRepository: Repository<MezonUser>,
   ) {
     this.client = clientService.getClient();
   }
@@ -144,6 +147,21 @@ export class BotGateway {
             name: msg.channel_label,
             type: msg.mode,
             isPublic: msg.is_public,
+          });
+        }
+      });
+
+    this.usersRepository
+      .findOne({
+        where: { userId: msg.sender_id },
+      })
+      .then(user => {
+        if (!user) {
+          this.usersRepository.save({
+            userId: msg.sender_id,
+            username: msg.username,
+            avatar: msg.avatar,
+            displayName: msg.display_name,
           });
         }
       });

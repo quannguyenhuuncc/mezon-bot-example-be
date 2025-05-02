@@ -45,3 +45,7 @@ export function random<T>(array: T[]): T {
 export function showIf<T>(condition: boolean, value: T): T | undefined {
   return condition ? value : typeof value === 'string' ? ('' as T) : undefined;
 }
+
+export function capitalizeFirstLetter(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}

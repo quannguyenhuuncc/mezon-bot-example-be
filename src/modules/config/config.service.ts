@@ -29,8 +29,6 @@ export class ConfigService implements OnModuleInit {
         this.configCache.set(config.key, config.value);
         configObject[config.key] = config.value;
       });
-
-      this.logger.log(`Loaded ${configs.length} configurations into cache`);
       return configObject;
     } catch (error) {
       this.logger.error(`Failed to load configs: ${error.message}`);

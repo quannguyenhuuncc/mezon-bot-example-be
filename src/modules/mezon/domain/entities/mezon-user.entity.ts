@@ -8,7 +8,8 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-@Entity('mezon_users')
+import { BOT_TABLES } from 'src/common/enums/bot.enum';
+@Entity(BOT_TABLES.USER)
 @Index(['userId', 'email'])
 export class MezonUser extends BaseEntity {
   @PrimaryColumn()
@@ -26,11 +27,11 @@ export class MezonUser extends BaseEntity {
     type: 'varchar',
     length: 100,
     nullable: true,
-    name: 'display_name',
+    name: 'displayName',
   })
   @IsString()
   @IsOptional()
-  display_name: string;
+  displayName: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @IsUrl()

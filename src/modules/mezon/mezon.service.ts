@@ -6,6 +6,7 @@ import {
   ApiMessageRef,
   ChannelMessageContent,
   MezonClient,
+  TokenSentEvent,
 } from 'mezon-sdk';
 
 @Injectable()
@@ -139,7 +140,7 @@ export class MezonService {
     code?: number;
     topic_id?: string;
   }) {
-    this.client.sendMessage(
+    return this.client.sendMessage(
       params.clan_id,
       params.channel_id,
       params.mode,
@@ -162,12 +163,12 @@ export class MezonService {
     mode: number;
     is_public: boolean;
     message_id: string;
-    content: any;
+    content: ChannelMessageContent;
     mentions?: Array<ApiMessageMention>;
     attachments?: Array<ApiMessageAttachment>;
     hideEditted?: boolean;
   }) {
-    this.client.updateChatMessage(
+    return this.client.updateChatMessage(
       params.clan_id,
       params.channel_id,
       params.mode,
@@ -175,6 +176,12 @@ export class MezonService {
       params.message_id,
       params.content,
       params.mentions,
+      params.attachments,
+      params.hideEditted || false,
     );
+  }
+
+  sendToken(tokenSentEvent: TokenSentEvent) {
+    return this.client.sendToken(tokenSentEvent);
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { MezonService } from '../mezon/mezon.service';
 import { Repository } from 'typeorm';
-import { MezonUser } from '../mezon/domain/entities/mezon-users.entity';
-import { Channel } from '../mezon/domain/entities/channel.entity';
+import { MezonUser } from '../mezon/domain/entities/mezon-user.entity';
+import { Channel } from '../mezon/domain/entities/mezon-channel.entity';
 import { generateChannelMessageContent } from 'src/common/utils/message';
 import { EMarkdownType } from 'mezon-sdk';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,8 +13,6 @@ export class BotService {
 
   constructor(
     private readonly mezonService: MezonService,
-    @InjectRepository(MezonUser)
-    private readonly usersRepository: Repository<MezonUser>,
     @InjectRepository(Channel)
     private readonly channelsRepository: Repository<Channel>,
   ) {}
