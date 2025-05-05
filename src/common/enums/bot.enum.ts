@@ -19,6 +19,8 @@ export enum BOT_COMMANDS {
   BUTTON_MESSAGE_COMPONENT = 'button_message_component',
   EMBED = 'embed',
   SELECT_MESSAGE_COMPONENT = 'select_message_component',
+  ADD_VOICE_CHANNELS = 'add_voice_channels',
+  MENTION = 'mention',
 }
 
 export enum BOT_BUTTON_ACTION_FEATURES {
@@ -29,7 +31,13 @@ export enum BOT_BUTTON_ACTION_FEATURES {
 }
 
 export enum BOT_TABLES {
-  BOT_MESSAGE = 'mezon_bot_messages',
-  CHANNELS = 'mezon_channels',
-  USER = 'mezon_users',
+  // bot tables
+  CONFIG = 'bot_config',
+  BOT_MESSAGE = 'bot_messages',
+  USER = 'users',
+
+  // mezon tables
+  MEZON_CHANNELS = 'mezon_channels',
+  MEZON_USER = 'mezon_users',
+  VOICE_CHANNEL = 'mezon_voice_channels',
 }

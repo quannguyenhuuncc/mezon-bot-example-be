@@ -1,4 +1,4 @@
-import { ChannelMessageContent, EMarkdownType, IEmbedProps } from 'mezon-sdk';
+import { ChannelMessageContent, EMarkdownType, IEmbedProps, HashtagOnMessage, ApiMessageMention } from 'mezon-sdk';
 import { EMessageMode } from 'src/common/enums/mezon.enum';
 
 declare global {
@@ -51,6 +51,8 @@ declare global {
     refs: Array<ApiMessageRef>;
     embed?: IEmbedProps[];
     components?: IMessageActionRow[];
+    hg?: HashtagOnMessage[];
+    mentions?: Array<ApiMessageMention>;
   }
 
   interface MessageForUser {
@@ -84,4 +86,4 @@ declare global {
   };
 }
 
-export {};
+export { };

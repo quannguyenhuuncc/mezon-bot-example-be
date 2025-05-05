@@ -43,7 +43,7 @@ export class HelpCommand extends CommandBase {
     const messageContent = replyTemplate({
       botName,
       botCommandsCount: allCommands.length,
-      commandNames: allCommands,
+      commandNames: allCommands.toSorted(),
       dynamicCommands: [],
       dynamicCommandsCount: 0,
     });

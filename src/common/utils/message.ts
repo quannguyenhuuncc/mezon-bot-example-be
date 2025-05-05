@@ -39,19 +39,26 @@ interface EmbedField {
 
 // Message factory class
 class MessageFactory {
-  static createReplyMessage(messageContent: string, msg: ChannelMessage) {
+  static createReplyMessage(
+    messageContent: string,
+    msg: ChannelMessage,
+    type?: EMarkdownType,
+  ) {
     return {
       contentText: messageContent,
       channelId: msg.channel_id,
       isPublic: msg.is_public ?? false,
       channelMode: msg.mode ?? EMessageMode.CHANNEL_MESSAGE,
-      type: EMarkdownType.TRIPLE,
-      clanId: msg.clan_id ?? "=",
+      type: type || EMarkdownType.TRIPLE,
+      clanId: msg.clan_id ?? '=',
       refs: this.createMessageRef(msg),
     };
   }
 
-  static createChannelMessageContent(message: string, blockMessage: boolean): ChannelMessageContent {
+  static createChannelMessageContent(
+    message: string,
+    blockMessage: boolean,
+  ): ChannelMessageContent {
     const messageContent = blockMessage ? `\`\`\`${message}\`\`\`` : message;
     const markdownConfig = blockMessage
       ? [{ type: EMarkdownType.TRIPLE, s: 0, e: messageContent.length }]
@@ -65,24 +72,28 @@ class MessageFactory {
   }
 
   static createMessageRef(msg: ChannelMessage): ApiMessageRef[] {
-    return [{
-      message_id: '',
-      message_ref_id: msg.message_id,
-      ref_type: 0,
-      message_sender_id: msg.sender_id,
-      message_sender_username: msg.username,
-      mesages_sender_avatar: msg.avatar,
-      message_sender_clan_nick: msg.clan_nick,
-      message_sender_display_name: msg.display_name,
-      content: JSON.stringify(msg.content),
-      has_attachment: Boolean(msg.attachments?.length),
-    }];
+    return [
+      {
+        message_id: '',
+        message_ref_id: msg.message_id,
+        ref_type: 0,
+        message_sender_id: msg.sender_id,
+        message_sender_username: msg.username,
+        mesages_sender_avatar: msg.avatar,
+        message_sender_clan_nick: msg.clan_nick,
+        message_sender_display_name: msg.display_name,
+        content: JSON.stringify(msg.content),
+        has_attachment: Boolean(msg.attachments?.length),
+      },
+    ];
   }
 }
 
 // Component factory class
 class ComponentFactory {
-  static createButtonComponents(buttonGroups: Array<{ buttons: ButtonOption[] }>) {
+  static createButtonComponents(
+    buttonGroups: Array<{ buttons: ButtonOption[] }>,
+  ) {
     return buttonGroups.map(({ buttons }) => ({
       components: buttons.map(({ id, label, style }) => ({
         id,
@@ -95,17 +106,22 @@ class ComponentFactory {
     }));
   }
 
-  static createSelectComponents(selects: Array<{ id: string; options: SelectOption[] }>, defaultValue?: SelectOption) {
+  static createSelectComponents(
+    selects: Array<{ id: string; options: SelectOption[] }>,
+    defaultValue?: SelectOption,
+  ) {
     return selects.map(({ id, options }) => ({
-      components: [{
-        id,
-        type: EMessageComponentType.SELECT,
-        component: {
-          options,
-          required: true,
-          valueSelected: defaultValue,
+      components: [
+        {
+          id,
+          type: EMessageComponentType.SELECT,
+          component: {
+            options,
+            required: true,
+            valueSelected: defaultValue,
+          },
         },
-      }],
+      ],
     }));
   }
 
@@ -117,13 +133,15 @@ class ComponentFactory {
     timestamp?: string;
   }) {
     const { title, color, footer, fields, timestamp } = params;
-    return [{
-      color,
-      title,
-      fields,
-      timestamp: timestamp ?? new Date().toISOString(),
-      footer: footer ?? MEZON_EMBED_FOOTER,
-    }];
+    return [
+      {
+        color,
+        title,
+        fields,
+        timestamp: timestamp ?? new Date().toISOString(),
+        footer: footer ?? MEZON_EMBED_FOOTER,
+      },
+    ];
   }
 
   static createInputEmbed({
@@ -190,12 +208,16 @@ class ComponentFactory {
     };
   }
 
-  static createRadioEmbed(id: string, name: string, options: Array<{
-    label: string;
-    value: string | number;
-    description?: string;
-    style?: EButtonMessageStyle;
-  }>) {
+  static createRadioEmbed(
+    id: string,
+    name: string,
+    options: Array<{
+      label: string;
+      value: string | number;
+      description?: string;
+      style?: EButtonMessageStyle;
+    }>,
+  ) {
     return {
       name,
       value: '',
@@ -204,25 +226,43 @@ class ComponentFactory {
         name,
         type: EMessageComponentType.RADIO,
         component: options,
-      }
+      },
     };
   }
 }
 
 // Export factory methods
-export const generateReplyMessage = ({ messageContent, msg }: { messageContent: string; msg: ChannelMessage }) =>
-  MessageFactory.createReplyMessage(messageContent, msg);
+export const generateReplyMessage = ({
+  messageContent,
+  msg,
+  type,
+}: {
+  messageContent: string;
+  msg: ChannelMessage;
+  type?: EMarkdownType;
+}) => MessageFactory.createReplyMessage(messageContent, msg, type);
 
-export const generateChannelMessageContent = ({ message, blockMessage }: { message: string; blockMessage: boolean }) =>
-  MessageFactory.createChannelMessageContent(message, blockMessage);
+export const generateChannelMessageContent = ({
+  message,
+  blockMessage,
+}: {
+  message: string;
+  blockMessage: boolean;
+}) => MessageFactory.createChannelMessageContent(message, blockMessage);
 
 export const generateMessageRef = (msg: ChannelMessage) =>
   MessageFactory.createMessageRef(msg);
 
-export const generateButtonMessageComponents = ({ buttonGroups }: { buttonGroups: Array<{ buttons: ButtonOption[] }> }) =>
-  ComponentFactory.createButtonComponents(buttonGroups);
+export const generateButtonMessageComponents = ({
+  buttonGroups,
+}: {
+  buttonGroups: Array<{ buttons: ButtonOption[] }>;
+}) => ComponentFactory.createButtonComponents(buttonGroups);
 
-export const generateSelectMessageComponents = ({ selects, defaultValue }: {
+export const generateSelectMessageComponents = ({
+  selects,
+  defaultValue,
+}: {
   selects: Array<{ id: string; options: SelectOption[] }>;
   defaultValue?: SelectOption;
 }) => ComponentFactory.createSelectComponents(selects, defaultValue);
@@ -233,7 +273,11 @@ export const generateInputEmbedMessage = ComponentFactory.createInputEmbed;
 
 export const generateSelectEmbedMessage = ComponentFactory.createSelectEmbed;
 
-export const generateRadioEmbedMessage = ({ id, name, options }: {
+export const generateRadioEmbedMessage = ({
+  id,
+  name,
+  options,
+}: {
   id: string;
   name: string;
   options: Array<{
@@ -243,3 +287,47 @@ export const generateRadioEmbedMessage = ({ id, name, options }: {
     style?: EButtonMessageStyle;
   }>;
 }) => ComponentFactory.createRadioEmbed(id, name, options);
+
+export const addTagChannelInMessage = (
+  messageContent: string,
+  channels: {
+    name: string;
+    id: string;
+  }[],
+) =>
+  channels.map(item => {
+    messageContent += `#${item.name} `;
+    return {
+      channelid: item.id,
+      s: messageContent.length - (2 + item.name.length),
+      e: messageContent.length - 1,
+    };
+  });
+interface MentionUser {
+  username: string;
+  id: string;
+}
+
+export const addMentionsInMessage = (
+  users: MentionUser[],
+  messageContent: string,
+  joinStr: string
+) => {
+  return users.map((user, index) => {
+    const previousMention = index > 0
+      ? users[index - 1].username?.length || users[index - 1].id.length
+      : 0;
+
+    const startPosition = index === 0
+      ? messageContent.length - 1
+      : messageContent.length + (previousMention * index) + (joinStr.length * index);
+
+    const mentionLength = user.username?.length || user.id.length;
+
+    return {
+      user_id: user.id,
+      s: startPosition,
+      e: startPosition + mentionLength + 2
+    };
+  });
+};

@@ -45,17 +45,21 @@ export class MessageQueueService {
         isPublic,
         channelMode,
         refs,
+        hg,
+        mentions
       } = message;
       await this.mezonService.sendMessage({
         clan_id: clanId,
         channel_id: channelId,
         is_public: isPublic,
         mode: channelMode,
+        mentions: mentions,
         msg: {
           ...generateChannelMessageContent({
             message: contentText,
             blockMessage: type === EMarkdownType.TRIPLE,
           }),
+          hg: hg,
           embed: embed,
           components: components,
         },

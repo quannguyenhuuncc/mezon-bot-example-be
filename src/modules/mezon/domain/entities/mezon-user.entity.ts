@@ -9,7 +9,7 @@ import {
   IsUrl,
 } from 'class-validator';
 import { BOT_TABLES } from 'src/common/enums/bot.enum';
-@Entity(BOT_TABLES.USER)
+@Entity(BOT_TABLES.MEZON_USER)
 @Index(['userId', 'email'])
 export class MezonUser extends BaseEntity {
   @PrimaryColumn()
