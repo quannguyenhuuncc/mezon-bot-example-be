@@ -17,6 +17,8 @@ import { MezonModule } from './modules/mezon/mezon.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BotModule } from './modules/bot/bot.module';
 import { BotModule as BotRestModule } from './modules/bot-rest/bot.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -26,6 +28,9 @@ import { BotModule as BotRestModule } from './modules/bot-rest/bot.module';
       load: [appConfig, databaseConfig],
       validate,
     }),
+
+    ScheduleModule.forRoot(),
+
 
     // Database
     TypeOrmModule.forRootAsync({
@@ -83,6 +88,7 @@ import { BotModule as BotRestModule } from './modules/bot-rest/bot.module';
     EventEmitterModule.forRoot(),
     BotModule,
     BotRestModule,
+    TasksModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

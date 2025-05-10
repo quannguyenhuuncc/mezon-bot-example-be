@@ -6,3 +6,4 @@ export { SelectMessageComponentCommand } from './select_message_component/select
 export { UpdateMessageCommand } from './update_message/update-massage.command'
 export { WDCommand } from './withdraw/withdraw.command'
 export { MentionCommand } from './mention/mention.command'
+export { RemindCommand } from './remind/remind.command'

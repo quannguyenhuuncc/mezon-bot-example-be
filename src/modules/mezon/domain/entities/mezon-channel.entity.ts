@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { BaseEntity } from '../../../../common/base.entity';
 import { Exclude } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { EMessageMode } from '../../../../common/enums/mezon.enum';
 import { BOT_TABLES } from 'src/common/enums/bot.enum';
+import { Remind } from 'src/modules/tasks/domain/entities/remind.entity';
 
 @Entity(BOT_TABLES.MEZON_CHANNELS)
 export class Channel extends BaseEntity {

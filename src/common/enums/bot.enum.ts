@@ -21,6 +21,7 @@ export enum BOT_COMMANDS {
   SELECT_MESSAGE_COMPONENT = 'select_message_component',
   ADD_VOICE_CHANNELS = 'add_voice_channels',
   MENTION = 'mention',
+  REMIND = 'remind',
 }
 
 export enum BOT_BUTTON_ACTION_FEATURES {
@@ -35,6 +36,7 @@ export enum BOT_TABLES {
   CONFIG = 'bot_config',
   BOT_MESSAGE = 'bot_messages',
   USER = 'users',
+  REMIND = 'reminds',
 
   // mezon tables
   MEZON_CHANNELS = 'mezon_channels',

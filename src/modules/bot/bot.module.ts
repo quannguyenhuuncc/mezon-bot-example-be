@@ -3,7 +3,7 @@ import { MezonModule } from '../mezon/mezon.module';
 import { BotGateway } from './bot.gateway';
 import { EventListenerChannelMessage } from './listeners/on-mezon-listener/channel-message.listen';
 import { Asterisk } from './asterisk-commands/asterisk';
-import { AddVoiceChannelsCommand, HelpCommand, EmbedCommand, PingCommand, SelectMessageComponentCommand, UpdateMessageCommand, WDCommand, MentionCommand } from './asterisk-commands/commands';
+import { AddVoiceChannelsCommand, HelpCommand, EmbedCommand, PingCommand, SelectMessageComponentCommand, UpdateMessageCommand, WDCommand, MentionCommand, RemindCommand } from './asterisk-commands/commands';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Channel } from '../mezon/domain/entities/mezon-channel.entity';
 import { MezonUser } from '../mezon/domain/entities/mezon-user.entity';
@@ -14,11 +14,12 @@ import { SelectMessageExcuteListener } from './listeners/handler/button-click/se
 import { EmbedMessageExcuteListener } from './listeners/handler/button-click/embed-excute.listen';
 import { SendTokenListener } from './listeners/on-mezon-listener/send-token.listen';
 import { VoiceChannel } from '../mezon/domain/entities/voice-channel.entity';
+import { Remind } from '../tasks/domain/entities/remind.entity';
 
 @Module({
   imports: [
     MezonModule,
-    TypeOrmModule.forFeature([Channel, MezonUser, MezonBotMessage, VoiceChannel]),
+    TypeOrmModule.forFeature([Channel, MezonUser, MezonBotMessage, VoiceChannel, Remind]),
   ],
   providers: [
     BotGateway,
@@ -39,7 +40,8 @@ import { VoiceChannel } from '../mezon/domain/entities/voice-channel.entity';
     EmbedCommand,
     WDCommand,
     AddVoiceChannelsCommand,
-    MentionCommand
+    MentionCommand,
+    RemindCommand,
   ],
   exports: [BotGateway],
 })

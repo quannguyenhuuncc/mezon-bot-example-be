@@ -1,4 +1,4 @@
-import { Column, Entity, Index, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { BaseEntity } from '../../../../common/base.entity';
 import { Exclude } from 'class-transformer';
 import {
@@ -9,6 +9,7 @@ import {
   IsUrl,
 } from 'class-validator';
 import { BOT_TABLES } from 'src/common/enums/bot.enum';
+import { Remind } from 'src/modules/tasks/domain/entities/remind.entity';
 @Entity(BOT_TABLES.MEZON_USER)
 @Index(['userId', 'email'])
 export class MezonUser extends BaseEntity {
@@ -42,4 +43,8 @@ export class MezonUser extends BaseEntity {
   @IsEmail()
   @IsOptional()
   email: string;
+
+  @OneToMany(() => Remind, (remind) => remind.mezonUser)
+  @JoinColumn({ name: 'remind_by' })
+  public reminds: Remind[];
 }
