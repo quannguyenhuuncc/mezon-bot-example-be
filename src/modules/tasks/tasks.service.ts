@@ -31,12 +31,21 @@ export class TasksService {
 
     async remind() {
         const now = new Date();
-        const oldTimeNeedSend = new Date(now.getTime() - 60 * 1000 * 15);
+        const utcNow = Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            now.getUTCHours(),
+            now.getUTCMinutes(),
+            now.getUTCSeconds()
+        );
+        const oldTimeNeedSend = new Date(utcNow - 60 * 1000 * 15);
+        
         const reminds = await this.remindRepository.find({
             where: {
                 isActive: true,
                 isSent: false,
-                remindAt: Between(oldTimeNeedSend.getTime(), now.getTime()),
+                remindAt: Between(oldTimeNeedSend.getTime(), utcNow),
             },
             relations: ['mezonUser'],
         })
