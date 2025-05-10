@@ -49,11 +49,31 @@ export function showIf<T>(condition: boolean, value: T): T | undefined {
 export function capitalizeFirstLetter(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+/**
+ * Converts a date string, time string and timezone to a UTC timestamp
+ * @param {string} dateString - Date in format 'YYYY-MM-DD'
+ * @param {string} timeString - Time in format 'HH:MM:SS' or 'HH:MM'
+ * @param {string} timeZone - Timezone string (e.g. 'Asia/Ho_Chi_Minh', 'Europe/London')
+ * @returns {number} UTC timestamp in milliseconds
+ */
+export function toUtcTimestamp(dateString, timeString, timeZone) {
+  // Handle time string without seconds
+  if (timeString.split(':').length === 2) {
+    timeString += ':00';
+  }
 
-export function toUtcTimestamp(dateString: string, timeString: string, timeZone: string): number {
-  const localDate = new Date(`${dateString}T${timeString}`);
-  const utcTimestamp = localDate.getTime() - (localDate.getTimezoneOffset() * 60000);
-  return Math.floor(utcTimestamp / 1000);
+  // Combine date and time strings
+  const dateTimeString = `${dateString}T${timeString}`;
+
+  // Create a date object with the specified timezone
+  const date = new Date(dateTimeString);
+
+  // Convert to UTC timestamp based on the provided timezone
+  const utcTimestamp = new Date(
+    date.toLocaleString('en-US', { timeZone })
+  ).getTime();
+
+  return utcTimestamp;
 }
 
 // Hàm này sẽ trả về 2 phần tử là 15 phút trước và thời điểm hiện tại, trả về dưới dạng timestamp utc
