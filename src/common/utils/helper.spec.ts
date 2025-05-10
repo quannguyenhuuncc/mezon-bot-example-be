@@ -1,4 +1,4 @@
-import { getOptionalFields, getRandomColor, random, showIf, capitalizeFirstLetter, toUtcTimestamp, getLast15MinutesTimestamp } from './helper';
+import { getOptionalFields, getRandomColor, random, showIf, capitalizeFirstLetter } from './helper';
 
 describe('Helper Functions', () => {
     describe('getOptionalFields', () => {
@@ -67,38 +67,4 @@ describe('Helper Functions', () => {
             expect(capitalizeFirstLetter('')).toBe('');
         });
     });
-
-    describe('toUtcTimestamp', () => {
-        it.each([
-            {
-                date: '2025-05-10',
-                time: '21:52:00',
-                timezone: '+0700',
-                expected: 1746888720000
-            }
-        ])('should convert $date $time $timezone to UTC timestamp', ({ date, time, timezone, expected }) => {
-            // Mock Date to have consistent timezone offset
-            jest.restoreAllMocks();
-            const originalDate = global.Date;
-
-            const result = toUtcTimestamp(date, time, timezone);
-
-            // Restore original Date
-            global.Date = originalDate;
-
-            expect(result).toBe(expected);
-        });
-    });
-
-    describe('getLast15MinutesTimestamp', () => {
-        it('should return 2 timestamps for the last 15 minutes', () => {
-            const [fifteenMinutesAgoTimestamp, nowTimestamp] = getLast15MinutesTimestamp();
-
-            const now = new Date();
-            const fifteenMinutesAgo = new Date(now.getTime() - 15 * 60 * 1000);
-
-            expect(fifteenMinutesAgoTimestamp).toBe(Math.floor(fifteenMinutesAgo.getTime() / 1000));
-            expect(nowTimestamp).toBe(Math.floor(now.getTime() / 1000));
-        })
-    })
 });

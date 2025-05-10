@@ -8,7 +8,6 @@ import { Remind } from 'src/modules/tasks/domain/entities/remind.entity';
 import { Repository } from 'typeorm';
 import { MezonUser } from 'src/modules/mezon/domain/entities/mezon-user.entity';
 import { Logger } from '@nestjs/common';
-import { toUtcTimestamp } from 'src/common/utils/helper';
 
 @Command(BOT_COMMANDS.REMIND)
 export class RemindCommand extends CommandBase {
@@ -79,19 +78,12 @@ Example: *remind 2025-01-01 00:00:00 +0700 Hello world -> Remind you at 2025-01-
 
     const [dateString, timeString, timeZone, ...content] = args;
 
-    // Convert input date/time to UTC timestamp
-    const utcTimestamp = toUtcTimestamp(dateString, timeString, timeZone);
+    const date = new Date(`${dateString}T${timeString}${timeZone}`);
+    const utcTimestamp = date.getTime();
 
-    const now = new Date();
-    const currentUtc = Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      now.getUTCHours(),
-      now.getUTCMinutes(),
-      now.getUTCSeconds()
-  );
-    if (utcTimestamp < currentUtc) {
+    const currentDate = new Date();
+    const currentTimestamp = currentDate.getTime();
+    if (utcTimestamp < currentTimestamp) {
       return [
         generateReplyMessage({
           messageContent: 'Cannot set reminder for a past date. Please specify a future date and time.',
