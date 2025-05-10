@@ -1,8 +1,9 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../../common/base.entity';
 import { Exclude } from 'class-transformer';
+import { BOT_TABLES } from 'src/common/enums/bot.enum';
 
-@Entity('users')
+@Entity(BOT_TABLES.USER)
 export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;

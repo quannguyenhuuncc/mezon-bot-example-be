@@ -13,8 +13,8 @@ export class MessageQueueService {
     this.startMessageProcessor();
   }
 
-  private async processDirectMessage(message: MessageForUser) {
-    const dmChannel = await this.mezonService
+  private processDirectMessage(message: MessageForUser) {
+    return this.mezonService
       .getClient()
       .createDMchannel(message.mezonUserId!)
       .then(dmChannel => {
@@ -35,16 +35,35 @@ export class MessageQueueService {
 
   private async processChannelMessage(message: MessageForChannel) {
     try {
+      const {
+        embed,
+        components,
+        contentText,
+        type,
+        clanId,
+        channelId,
+        isPublic,
+        channelMode,
+        refs,
+        hg,
+        mentions
+      } = message;
       await this.mezonService.sendMessage({
-        clan_id: message.clanId,
-        channel_id: message.channelId,
-        is_public: message.isPublic,
-        mode: message.channelMode,
-        msg: generateChannelMessageContent({
-          message: message.contentText,
-          blockMessage: message.type === EMarkdownType.TRIPLE,
-        }),
-        ref: message.refs,
+        clan_id: clanId,
+        channel_id: channelId,
+        is_public: isPublic,
+        mode: channelMode,
+        mentions: mentions,
+        msg: {
+          ...generateChannelMessageContent({
+            message: contentText,
+            blockMessage: type === EMarkdownType.TRIPLE,
+          }),
+          hg: hg,
+          embed: embed,
+          components: components,
+        },
+        ref: refs,
       });
     } catch (error) {
       console.error('Error sending channel message:', error);

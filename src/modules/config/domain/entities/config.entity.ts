@@ -7,6 +7,7 @@ import {
   BeforeUpdate,
 } from 'typeorm';
 import { BaseEntity } from '../../../../common/base.entity';
+import { BOT_TABLES } from 'src/common/enums/bot.enum';
 
 /**
  * Enum representing possible configuration value types
@@ -24,7 +25,7 @@ export enum ConfigValueType {
  * Config entity for storing application configuration values
  * Supports multiple data types through JSON serialization/deserialization
  */
-@Entity('config')
+@Entity(BOT_TABLES.CONFIG)
 export class Config extends BaseEntity {
   @Column({ unique: true, length: 255 })
   @Index()

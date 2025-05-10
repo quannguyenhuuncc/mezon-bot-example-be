@@ -1,1 +1,9 @@
 export { HelpCommand } from './help/help.command';
+export { PingCommand } from './ping/ping.command';
+export { AddVoiceChannelsCommand } from './add_voice_channel/add_voice_channel.command'
+export { EmbedCommand } from './embed_message/embed_message.command'
+export { SelectMessageComponentCommand } from './select_message_component/select_message_component.command'
+export { UpdateMessageCommand } from './update_message/update-massage.command'
+export { WDCommand } from './withdraw/withdraw.command'
+export { MentionCommand } from './mention/mention.command'
+export { RemindCommand } from './remind/remind.command'

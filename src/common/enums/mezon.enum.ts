@@ -24,3 +24,5 @@ export enum EMessageMode {
   DM_MESSAGE = 4,
   THREAD_MESSAGE = 6,
 }
+
+export const DEFAULT_CLAN_ID = '0';

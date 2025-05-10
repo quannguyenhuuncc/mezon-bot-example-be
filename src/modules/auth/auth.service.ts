@@ -2,11 +2,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
-import { UserResponseDto } from '../users/dto/user-response.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { TokenService } from './token/token.service';
 import { User } from '../users/domain/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
+import { UserAuthResponseDto } from '../users/dto/user-auth-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -49,7 +49,7 @@ export class AuthService {
 
     return {
       ...tokens,
-      user: new UserResponseDto(user),
+      user: new UserAuthResponseDto(user),
     };
   }
 
@@ -77,7 +77,7 @@ export class AuthService {
 
     return {
       ...tokens,
-      user: user,
+      user: new UserAuthResponseDto(user),
     };
   }
 
