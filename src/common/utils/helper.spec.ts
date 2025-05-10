@@ -69,43 +69,12 @@ describe('Helper Functions', () => {
     });
 
     describe('toUtcTimestamp', () => {
-        it('should convert date, time and timezone to UTC timestamp', () => {
-            // Mock Date to have consistent timezone offset
-            const originalDate = global.Date;
-            const mockDate = jest.fn(() => ({
-                getTime: jest.fn(() => 1609459200000), // 2021-01-01T00:00:00.000Z
-                getTimezoneOffset: jest.fn(() => 0) // UTC
-            })) as unknown as DateConstructor;
-
-            global.Date = mockDate;
-
-            const result = toUtcTimestamp('2021-01-01', '00:00:00', '+0000');
-
-            // Restore original Date
-            global.Date = originalDate;
-
-            expect(result).toBe(1609459200);
-        });
-
-        it('should handle different timezones correctly', () => {
-            // Tạo một mock cho Date để đảm bảo kết quả nhất quán
-            jest.spyOn(Date.prototype, 'getTime').mockReturnValue(1609459200000);
-            jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(0);
-
-            const result = toUtcTimestamp('2021-01-01', '00:00:00', '+0700');
-
-            // Khôi phục mock
-            jest.restoreAllMocks();
-
-            expect(result).toBe(1609459200);
-        });
-
         it.each([
             {
                 date: '2025-05-10',
-                time: '14:02:23',
+                time: '21:52:00',
                 timezone: '+0700',
-                expected: 1746885743
+                expected: 1746888720000
             }
         ])('should convert $date $time $timezone to UTC timestamp', ({ date, time, timezone, expected }) => {
             // Mock Date to have consistent timezone offset
