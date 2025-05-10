@@ -7,6 +7,7 @@ import { CronJob } from 'cron';
 import { MezonService } from '../mezon/mezon.service';
 import { generateChannelMessageContent, generateMessageRef } from 'src/common/utils/message';
 import { ChannelMessage } from 'mezon-sdk';
+import { getLast15MinutesTimestamp } from 'src/common/utils/helper';
 
 @Injectable()
 export class TasksService {
@@ -30,22 +31,12 @@ export class TasksService {
     }
 
     async remind() {
-        const now = new Date();
-        const utcNow = Date.UTC(
-            now.getUTCFullYear(),
-            now.getUTCMonth(),
-            now.getUTCDate(),
-            now.getUTCHours(),
-            now.getUTCMinutes(),
-            now.getUTCSeconds()
-        );
-        const oldTimeNeedSend = new Date(utcNow - 60 * 1000 * 15);
-        
+        const [fifteenMinutesAgoTimestamp, nowTimestamp] = getLast15MinutesTimestamp();
         const reminds = await this.remindRepository.find({
             where: {
                 isActive: true,
                 isSent: false,
-                remindAt: Between(oldTimeNeedSend.getTime(), utcNow),
+                remindAt: Between(fifteenMinutesAgoTimestamp, nowTimestamp),
             },
             relations: ['mezonUser'],
         })

@@ -49,8 +49,18 @@ export function showIf<T>(condition: boolean, value: T): T | undefined {
 export function capitalizeFirstLetter(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
 export function toUtcTimestamp(dateString: string, timeString: string, timeZone: string): number {
   const localDate = new Date(`${dateString}T${timeString}`);
   const utcTimestamp = localDate.getTime() - (localDate.getTimezoneOffset() * 60000);
   return Math.floor(utcTimestamp / 1000);
+}
+
+// Hàm này sẽ trả về 2 phần tử là 15 phút trước và thời điểm hiện tại, trả về dưới dạng timestamp utc
+export function getLast15MinutesTimestamp(): [number, number] {
+  const now = new Date();
+  const fifteenMinutesAgo = new Date(now.getTime() - 15 * 60 * 1000);
+  const nowTimestamp = Math.floor(now.getTime() / 1000);
+  const fifteenMinutesAgoTimestamp = Math.floor(fifteenMinutesAgo.getTime() / 1000);
+  return [fifteenMinutesAgoTimestamp, nowTimestamp];
 }
