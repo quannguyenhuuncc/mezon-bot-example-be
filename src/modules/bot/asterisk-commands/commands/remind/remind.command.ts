@@ -82,8 +82,15 @@ Example: *remind 2025-01-01 00:00:00 +0700 Hello world -> Remind you at 2025-01-
     // Convert input date/time to UTC timestamp
     const utcTimestamp = toUtcTimestamp(dateString, timeString, timeZone);
 
-    // Ensure the reminder is set for a future date
-    const currentUtc = Date.now();
+    const now = new Date();
+    const currentUtc = Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes(),
+      now.getUTCSeconds()
+  );
     if (utcTimestamp < currentUtc) {
       return [
         generateReplyMessage({

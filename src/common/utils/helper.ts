@@ -49,25 +49,8 @@ export function showIf<T>(condition: boolean, value: T): T | undefined {
 export function capitalizeFirstLetter(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
-
-export function toUtcTimestamp(dateString, timeString, timeZone) {
-  // Combine date and time
-  const localDateTime = `${dateString}T${timeString}`;
-
-  // Create a date in the target time zone
-  const localDate = new Date(
-      new Intl.DateTimeFormat('en-US', {
-          timeZone,
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false
-      }).format(new Date(localDateTime))
-  );
-
-  // Get the timestamp in milliseconds and convert to seconds
-  return Math.floor(localDate.getTime());
+export function toUtcTimestamp(dateString: string, timeString: string, timeZone: string): number {
+  const localDate = new Date(`${dateString}T${timeString}`);
+  const utcTimestamp = localDate.getTime() - (localDate.getTimezoneOffset() * 60000);
+  return Math.floor(utcTimestamp / 1000);
 }
