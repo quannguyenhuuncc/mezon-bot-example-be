@@ -11,7 +11,7 @@ export class Asterisk implements AsteriskInterface {
   constructor(
     private readonly moduleRef: ModuleRef,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async execute(
     messageContent: string,
@@ -37,10 +37,10 @@ export class Asterisk implements AsteriskInterface {
 
   extractMessage = (messageContent: string) => {
     const trimmedMessageContent = messageContent.trim();
-    const botCommandPrefixs = this.configService.get(
+    const botCommandPrefixs = [this.configService.get(
       BOT_CONFIG.COMMAND_PREFIX,
-      ['*'],
-    );
+      '*',
+    )];
     if (
       !botCommandPrefixs.some(prefix =>
         trimmedMessageContent.startsWith(prefix),

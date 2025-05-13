@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Events, ChannelMessage } from 'mezon-sdk';
 import { BOT_CONFIG } from 'src/common/enums/bot.enum';
@@ -8,11 +8,12 @@ import { MessageQueueStore } from 'src/modules/mezon/message-queue-services/mess
 
 @Injectable()
 export class EventListenerChannelMessage {
+  private readonly logger = new Logger(EventListenerChannelMessage.name);
   constructor(
     private readonly configService: ConfigService,
     private readonly messageQueue: MessageQueueStore,
     private readonly asterisk: Asterisk,
-  ) {}
+  ) { }
 
   @OnEvent(Events.ChannelMessage)
   async handleCommand(message: ChannelMessage) {
@@ -32,10 +33,11 @@ export class EventListenerChannelMessage {
     if (message.code) return true;
 
     const messageContent = message.content?.t?.trim();
+
     return (
       !messageContent ||
-      !this.configService
-        .get(BOT_CONFIG.COMMAND_PREFIX, ['*'])
+      ![this.configService
+        .get(BOT_CONFIG.COMMAND_PREFIX, '*')]
         .some(prefix => messageContent.startsWith(prefix))
     );
   }
