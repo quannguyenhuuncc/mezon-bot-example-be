@@ -28,18 +28,10 @@ export class CreateConfigDto {
 
   @ApiProperty({
     description: 'Value of the configuration in any supported type',
-    example: 'dark',
-    oneOf: [
-      { type: 'string' },
-      { type: 'number' },
-      { type: 'boolean' },
-      { type: 'object', properties: { example: { type: 'string' } } },
-      { type: 'array', items: { type: 'string' } },
-      { type: 'date', format: 'date-time' },
-    ],
-    additionalProperties: true,
+    example: 'string',
   })
-  value: unknown;
+  @IsString()
+  value: string;
 
   @ApiProperty({
     description: 'Indicates if this configuration is active',

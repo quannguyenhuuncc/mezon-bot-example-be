@@ -14,7 +14,7 @@ export class ConfigService implements OnModuleInit {
   constructor(
     @InjectRepository(Config)
     private readonly configRepository: Repository<Config>,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     await this.loadAllConfigs();
@@ -27,7 +27,28 @@ export class ConfigService implements OnModuleInit {
       const configObject: Record<string, any> = {};
       configs.forEach(config => {
         this.configCache.set(config.key, config.value);
-        configObject[config.key] = config.value;
+        switch (config.type) {
+          case 'array':
+            configObject[config.key] = JSON.parse(config.value as string);
+            break;
+          case 'date':
+            configObject[config.key] = new Date(config.value as string);
+            break;
+          case 'number':
+            configObject[config.key] = Number(config.value);
+            break;
+          case 'string':
+            configObject[config.key] = config.value as string;
+            break;
+          case 'boolean':
+            configObject[config.key] = config.value === 'true';
+            break;
+          case 'object':
+            configObject[config.key] = JSON.parse(config.value as string);
+            break;
+          default:
+            configObject[config.key] = config.value;
+        }
       });
       return configObject;
     } catch (error) {
@@ -43,7 +64,35 @@ export class ConfigService implements OnModuleInit {
   getAllConfigs(): Promise<ConfigResponseDto[]> {
     return this.configRepository
       .find()
-      .then(configs => configs.map(config => new ConfigResponseDto(config)))
+      .then((configs) => {
+        const configObject: Record<string, any> = {};
+        configs.forEach(config => {
+          this.configCache.set(config.key, config.value);
+          switch (config.type) {
+            case 'array':
+              configObject[config.key] = JSON.parse(config.value as string);
+              break;
+            case 'date':
+              configObject[config.key] = new Date(config.value as string);
+              break;
+            case 'number':
+              configObject[config.key] = Number(config.value);
+              break;
+            case 'string':
+              configObject[config.key] = config.value as string;
+              break;
+            case 'boolean':
+              configObject[config.key] = config.value === 'true';
+              break;
+            case 'object':
+              configObject[config.key] = JSON.parse(config.value as string);
+              break;
+            default:
+              configObject[config.key] = config.value;
+          }
+        });
+        return configs.map(config => new ConfigResponseDto(config));
+      })
       .catch(error => {
         this.logger.error(`Failed to get all configs: ${error.message}`);
         throw error;
